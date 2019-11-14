@@ -24,9 +24,6 @@ class Argv:
 			self.__parseParameter(arg)
 
 		self.__getDefaults();
-		print(self.__givenPositional)
-		print(self.__givenNamed)
-		print(self.__givenBoolean)
 		self.__checkPositional()
 		self.__checkNamed()
 		self.__checkBoolean()
