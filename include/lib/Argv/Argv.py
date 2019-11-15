@@ -23,7 +23,7 @@ class Argv:
 				continue
 			self.__parseParameter(arg)
 
-		self.__getDefaults();
+		self.__getDefaults()
 		self.__checkPositional()
 		self.__checkNamed()
 		self.__checkBoolean()
@@ -36,7 +36,6 @@ class Argv:
 				continue
 			if self.__argvModel.getNamedArg(name).hasDefault() is False:
 				continue
-			print(name + " has default")
 			self.__givenNamed[name] = self.__argvModel.getNamedArg(name).getDefault()
 
 	def __parseParameter(self, arg:str):
@@ -48,6 +47,8 @@ class Argv:
 
 	def __checkPositional(self):
 		definedLength = self.__argvModel.getPositionalCount()
+		if definedLength is None:
+			definedLength = 0
 		availableLength = len(self.__givenPositional)
 		if definedLength==availableLength:
 			return
