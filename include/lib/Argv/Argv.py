@@ -31,6 +31,8 @@ class Argv:
 		self.__validatePositional()
 
 	def __getDefaults(self):
+		if self.__argvModel.getArgNames() is None:
+			return
 		for name in self.__argvModel.getArgNames():
 			if name in self.__givenNamed.keys():
 				continue
@@ -69,6 +71,9 @@ class Argv:
 
 	def __checkNamed(self):
 		defined = self.__argvModel.getArgNames()
+		if defined is None:
+			return
+
 		for name in defined:
 			arg = self.__argvModel.getNamedArg(name)
 			if name not in self.__givenNamed.keys() and arg.isMandatory() is True:
