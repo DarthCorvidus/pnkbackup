@@ -15,14 +15,14 @@ class BackupJob:
 	__argv = None
 	__entries = None
 	__date = None
-	def __init__(self, date:date, config:str, argv:Argv):
+	def __init__(self, config:str, argv:Argv):
 		self.__date = ConvertDate.datefromiso(argv.getNamedValue("force-date"))
 		self.__config = ""
 		self.__argv = argv
 		self.__config = Config(config)
 		self.__entries = BackupEntries.fromPath(self.__config.getTarget())
 
-	def __runFirst(self):
+	def run(self):
 		tmp = self.__config.getTarget()+"/temp.backup"
 		src = self.__config.getSource()
 		dst = self.__config.getTarget()+"/"+self.__date.strftime("%Y-%m-%d")
@@ -67,10 +67,3 @@ class BackupJob:
 		subprocess.run(["cp", daily, tmp, "-al"])
 		print("Renaming " + tmp + " "+dst)
 		os.rename(tmp, dst)
-
-	def run(self):
-		self.__runFirst()
-		if self.__entries.getEntryCount() <= 1:
-			#runFirst runs the first backup of a set, if a set is empty.
-			#self.__runFirst()
-			return
