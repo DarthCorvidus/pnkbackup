@@ -31,10 +31,8 @@ class BackupJob:
 			rsync.setTarget(dst)
 		count = self.__entries.getEntryCount()
 
-		print("Entries: "+str(count))
 		if count==1 and self.__entries.getEntry(count-1).getDate().toordinal()!=self.__date.toordinal():
 			rsync.setLink(self.__entries.getEntry(0).getAbsolutePath())
-		print(count>1)
 		if count>1 and os.path.exists(dst) is True:
 			rsync.setLink(self.__entries.getEntry(count-2).getAbsolutePath())
 		if count>1 and os.path.exists(dst) is not True:
@@ -43,6 +41,7 @@ class BackupJob:
 		print(rsync.getCommand())
 		rsync.exec()
 		if os.path.exists(dst) is False:
+			print("Renaming "+tmp+" to "+dst)
 			os.rename(tmp, dst)
 		self.__replicate(dst)
 

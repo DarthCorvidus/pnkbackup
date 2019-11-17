@@ -7,7 +7,6 @@ class Config:
 		for line in handle:
 			self.__parse(line)
 		handle.close()
-		print(self.__values)
 	def __parse(self, line:str):
 		stripped = line.strip()
 		if len(stripped)==0:

@@ -10,7 +10,7 @@ from include.local.BackupJobs.BackupJob import BackupJob
 class BackupJobs:
 	__argv = None
 	__jobs = None
-	
+
 	def __init__(self, argv:list):
 		model = ArgvBackup()
 		self.__argv = Argv(model, argv)
