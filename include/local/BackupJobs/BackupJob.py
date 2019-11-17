@@ -1,7 +1,6 @@
 import os
 import shutil
 import subprocess
-from datetime import date
 
 from include.lib.Argv.Argv import Argv
 from include.lib.Typetools.Convert.ConvertDate import ConvertDate
@@ -15,6 +14,7 @@ class BackupJob:
 	__argv = None
 	__entries = None
 	__date = None
+
 	def __init__(self, config:str, argv:Argv):
 		self.__date = ConvertDate.datefromiso(argv.getNamedValue("force-date"))
 		self.__config = ""

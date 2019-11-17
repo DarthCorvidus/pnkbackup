@@ -1,14 +1,12 @@
 import subprocess
 
-from include.local import BackupEntries
-
-
 class Rsync:
 	__source = None
 	__target = None
 	__exclude = None
 	__linkDest = None
 	__param = None
+
 	def __init__(self, source, target):
 		self.__param = []
 		self.__param.append("rsync")

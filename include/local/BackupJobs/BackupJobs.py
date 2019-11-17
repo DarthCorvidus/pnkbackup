@@ -1,7 +1,6 @@
 from glob import glob
 import os
 
-from datetime import date
 from include.lib.Argv.Argv import Argv
 from include.local.BackupJobs.ArgvBackup import ArgvBackup
 from include.local.BackupJobs.BackupJob import BackupJob
