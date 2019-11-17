@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 class Rsync:
@@ -17,6 +18,11 @@ class Rsync:
 
 	def setTarget(self, target):
 		self.__param[2] = target
+
+	def setExcludeFrom(self, exclude:dir):
+		if os.path.isfile(exclude) is False:
+			raise RuntimeError("exclude file "+exclude+" does not exist or is no file")
+		self.__param.append("--exclude-from="+exclude)
 
 	def getCommand(self):
 		return " ".join(self.__param)

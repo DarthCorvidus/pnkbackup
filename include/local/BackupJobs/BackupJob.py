@@ -27,6 +27,8 @@ class BackupJob:
 		src = self.__config.getSource()
 		dst = self.__config.getTarget()+"/"+self.__date.strftime("%Y-%m-%d")
 		rsync = Rsync(src, tmp)
+		if self.__config.hasExclude():
+			rsync.setExcludeFrom(self.__config.getExclude())
 		if os.path.exists(dst):
 			rsync.setTarget(dst)
 		count = self.__entries.getEntryCount()
