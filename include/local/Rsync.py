@@ -31,4 +31,4 @@ class Rsync:
 		self.__param.append("--link-dest="+linkdest)
 
 	def exec(self):
-		subprocess.run(self.__param)
+		subprocess.check_output(self.__param)

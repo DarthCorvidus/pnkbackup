@@ -22,6 +22,9 @@ class BackupJob:
 		self.__config = Config(config)
 		self.__entries = BackupEntries.fromPath(self.__config.getTarget())
 
+	def getConfigBasename(self) -> str:
+		return os.path.basename(self.__config.getFilename())
+
 	def run(self):
 		tmp = self.__config.getTarget()+"/temp.backup"
 		src = self.__config.getSource()
