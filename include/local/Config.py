@@ -1,12 +1,16 @@
 class Config:
 	__values = {}
-
+	__filename = ""
 	def __init__(self, file):
 		self.__values = {}
+		self.__filename = file
 		handle = open(file, "r")
 		for line in handle:
 			self.__parse(line)
 		handle.close()
+
+	def getFilename(self) -> str:
+		return self.__filename
 
 	def __parse(self, line:str):
 		stripped = line.strip()
