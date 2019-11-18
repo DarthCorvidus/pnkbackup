@@ -4,17 +4,21 @@ from include.lib.Argv.ArgModel import ArgModel
 from include.lib.Argv.ArgString import ArgString
 from include.lib.Argv.ArgvModel import ArgvModel
 from include.lib.Typetools.Validate.ValidateDate import ValidateDate
+from include.lib.Typetools.Validate.ValidatePath import ValidatePath
 
 
 class ArgvBackup(ArgvModel):
 	__positional = None
 	__positionalNames = None
 	__named = None
+
 	def __init__(self):
 		self.__named = {}
 		self.__positional = []
 		self.__positionalNames = []
-		self.__positional.append(ArgString())
+		config = ArgString()
+		config.setValidate(ValidatePath())
+		self.__positional.append(config)
 		self.__positionalNames.append("configuration")
 		force = ArgString()
 		force.setDefault(date.today().strftime("%Y-%m-%d"))
