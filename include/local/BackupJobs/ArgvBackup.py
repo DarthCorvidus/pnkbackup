@@ -21,6 +21,8 @@ class ArgvBackup(ArgvModel):
 		self.__positional.append(config)
 		self.__positionalNames.append("configuration")
 		force = ArgString()
+		#Set today as default date and use argv.getNamed("force-date") whereever today's date is needed, which saves us
+		#from having two dates & lots of comparing.
 		force.setDefault(date.today().strftime("%Y-%m-%d"))
 		force.setValidate(ValidateDate("iso"))
 		self.__named["force-date"] = force
