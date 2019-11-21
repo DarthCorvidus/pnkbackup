@@ -15,18 +15,19 @@ class TrimJob:
 	__toDelete = None
 	__max = None
 	__count = 0
+
 	def __init__(self, argv:list):
 		model = ArgvTrim()
 		self.__toDelete = []
-		self.__now = date.today()
 		self.__argv = Argv(model, argv)
+		self.__now = ConvertDate.datefromiso(self.__argv.getNamedValue("to"))
 		if self.__argv.hasNamedValue("max"):
 			self.__max = int(self.__argv.getNamedValue("max"))
 		self.__entries = BackupEntries.fromPath(self.__argv.getPositionalValue(1))
-		self.__selectDays();
+		self.__selectDays()
 		self.__selectWeeks()
 		self.__selectMonths()
-		self.__selectYears();
+		self.__selectYears()
 
 	def __selectDays(self):
 		if self.__argv.hasNamedValue("keepDays") is False:
@@ -39,12 +40,6 @@ class TrimJob:
 			return
 		referenceDate = self.__now - timedelta(weeks=int(self.__argv.getNamedValue("keepWeeks")))
 		self.__addGeneric(referenceDate, "weekly")
-
-	def __selectYears(self):
-		if self.__argv.hasNamedValue("keepYears") is False:
-			return
-		referenceDate = self.__now - timedelta(we=int(self.__argv.getNamedValue("keepYears")))
-		self.__addGeneric(referenceDate, "yearly")
 
 	def __selectMonths(self):
 		if self.__argv.hasNamedValue("keepMonths") is False:
@@ -67,6 +62,8 @@ class TrimJob:
 	def __addGeneric(self, referenceDate:date, period:str):
 		filter = BackupEntryFilter()
 		filter.setPeriods([period])
+		if self.__argv.hasNamedValue("from"):
+			filter.setFrom(ConvertDate.datefromiso(self.__argv.getNamedValue("from")))
 		filtered = self.__entries.getFiltered(filter)
 		for i in range(filtered.getEntryCount()):
 			if self.__max is not None and self.__count == self.__max:
@@ -91,12 +88,14 @@ class TrimJob:
 			os.rename(value.getAbsolutePath(), temp)
 			print("Deleting temporary folder")
 			shutil.rmtree(temp)
-			pass
-
 
 	def run(self):
+		if len(self.__toDelete)==0:
+			print("No files to be deleted.")
+			quit()
 		self.__toDelete.sort()
+		print("Files to be deleted:")
 		for value in self.__toDelete:
-			print(value)
+			print("\t"+value.getAbsolutePath())
 
 		self.__delete()

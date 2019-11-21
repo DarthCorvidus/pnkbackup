@@ -1,3 +1,5 @@
+import datetime
+
 from include.lib.Argv import ArgModel
 from include.lib.Argv.ArgString import ArgString
 from include.lib.Argv.ArgvModel import ArgvModel
@@ -18,13 +20,13 @@ class ArgvTrim(ArgvModel):
 		backup.setMandatory(True)
 		self.__positional.append(backup)
 		self.__positionalName.append("backup")
-		#fromdate = ArgString()
-		#fromdate.setValidate(ValidateDate("iso"))
-		#fromdate.setMandatory(True)
-		#self.__named["from"] = fromdate
-		#todate = ArgString()
-		#todate.setValidate(ValidateDate("iso"))
-		#self.__named["to"] = todate
+		fromdate = ArgString()
+		fromdate.setValidate(ValidateDate("iso"))
+		self.__named["from"] = fromdate
+		todate = ArgString()
+		todate.setDefault(datetime.date.today().strftime("%Y-%m-%d"))
+		todate.setValidate(ValidateDate("iso"))
+		self.__named["to"] = todate
 		subdir = ArgString()
 		self.__named["subdir"] = subdir
 		self.__named["keepDays"] = ArgString()
