@@ -12,6 +12,7 @@ class BackupJobs:
 	__jobs = None
 	__success = []
 	__failed = {}
+
 	def __init__(self, argv:list):
 		__failed = {}
 		__success = []
@@ -42,11 +43,16 @@ class BackupJobs:
 			print("Failed Jobs:")
 		for name in self.__failed.keys():
 			print("\t"+name+": "+self.__failed[name])
+
 	def run(self):
 		for job in self.__jobs:
 			try:
-				job.run()
+				retval = job.run()
+				if(retval==255):
+					self.__failed[job.getConfigBasename()] = "rsync command failed"
+					continue
 				self.__success.append(job.getConfigBasename())
+
 			except Exception as e:
 				self.__failed[job.getConfigBasename()] = e.__class__.__name__
 		self.printSuccess()

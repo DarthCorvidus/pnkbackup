@@ -44,11 +44,12 @@ class BackupJob:
 			rsync.setLink(self.__entries.getEntry(count-1).getAbsolutePath())
 
 		print(rsync.getCommand())
-		rsync.exec()
+		retval = rsync.exec()
 		if os.path.exists(dst) is False:
 			print("Renaming "+tmp+" to "+dst)
 			os.rename(tmp, dst)
 		self.__replicate(dst)
+		return retval
 
 	def __replicate(self, daily:str):
 		tmp = self.__config.getTarget()+"/temp.period"
