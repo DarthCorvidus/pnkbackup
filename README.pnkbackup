@@ -1,0 +1,51 @@
+pnkbackup
+
+pnkbackup processes one or more backup jobs defined within config files.
+
+Usage:
+
+	lnkbackup.php <config file or directory>
+
+Configuration:
+
+lnkbackup processes either one configuration file or a directory containing
+several configuration files ending with .conf, such as:
+
+    conf.d/mailserver.conf
+    conf.d/fileserver.conf
+    conf.d/images.conf
+
+Configuration files follow ini-format and must contain the following parameters:
+
+    source      remote or local directory following rsync conventions, such as
+                /data/fileserver or root@fileserver.example.com:/data/fileserver
+    target      local directory containing backup, such as /backup/fileserver.
+
+Configuration files may contain the following parameters:
+    exclude		absolute path to exclude file, which will be given to rsync via
+				--exclude-file.
+
+Parameters:
+
+	--force-date date as ISO 8601 to replace current date.
+
+Process:
+
+lnkbackup determines the current date or gets it from --force-date. Then a
+temporary folder called „backup.temp“ will be created within the target
+directory. After copying has finished, this will be renamed to <date>.
+
+On each Sunday, first day of month or year, period files <date>.weekly,
+<date>.monthly will be created. They will be created using cp -alv, using a
+temporary directory "temp.period", which will then renamed to <date>.<period>.
+If temp.period or <date>.<period> already exist, they will be deleted to be
+created anew.
+
+When several config files are used via config directory, lnkbackup will process
+one job after another. Each job will use the same date which was determined
+either when the script was called or given using --force-date.
+
+Error Handling:
+
+pnkbackup will try to finish all job even if one job fails. At the end of each
+complete run, pnkbackup prints a list of successful and failed jobs.
