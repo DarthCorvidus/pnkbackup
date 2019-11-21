@@ -1,6 +1,7 @@
 import os
 import subprocess
 
+
 class Rsync:
 	__source = None
 	__target = None
@@ -31,4 +32,4 @@ class Rsync:
 		self.__param.append("--link-dest="+linkdest)
 
 	def exec(self):
-		subprocess.check_output(self.__param)
+		return subprocess.call(self.__param)
