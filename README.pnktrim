@@ -1,0 +1,58 @@
+lnktrim - script to remove specific entries from a backup
+
+lnktrim is aimed at removing specific entries from a backup, say, all daily
+entries before a specific date.
+lnktrim first moves an entry/subdir to <backup path>/temp.delete before
+deleting it.
+
+Usage:
+
+	lnktrim.py <backup path> [parameters]
+
+For safety reasons, --run must be set as a parameter to actually delete from
+a set.
+
+Parameters:
+
+    --from        Date from which to start deleting entries.
+    --to          Date until which to delete entries.
+    --max         Maximum number of entries to delete in one run.
+    --keepDays    Number of days to keep, starting either from now or --to.
+    --keepWeeks   Number of weeks to keep, starting either from now or --to.
+    --keepMonths  Number of months to keep, starting either from now or --to.
+    --keepYears   Number of years to keep, starting either from now or --to.
+    --keepNone    deletes every entry, but respects --from, --to, --max,
+                  --subdir
+    --subdir      directory relative to the root of the backup which will be
+                  trimmed.
+    --run         Necessary to delete files; when called without --run,
+                  lnktrim.php only shows what would be deleted and kept.
+
+Note that --keep<period> doesn't count existing entries, but dates.
+For instance, --keepDays=365 will delete every daily entry that is older than
+365 days, not entries which exceed the count of 365 daily entries.
+
+
+Examples:
+
+    lnktrim.py <backup path> --keepDays=365 --keepYears=1 --keepWeeks=52 \
+    --keepMonths=12
+
+Deletes all entries which are older than one year.
+
+    lnktrim.py <backup path> --keepDays=0 --keepYears=0 --keepYeeks=0 \
+    --keepMonths=0 --to=2017-12-31
+
+Deletes everything before and including 2017-12-31.
+
+    lnktrim.py <backup path> --keepNone, --from=2017-01-01 --to=2017-12-31
+
+Deletes every entry between 2017-01-01 and 2017-12-31.
+
+    lnktrim.py <backup path> --keepDays=365
+
+Deletes daily entrys older than one year, but keeps everything else.
+
+    lnktrim.py <backup path> --keepNone --subdir=browserprofile/cache
+
+Deletes the subdirectory „browserprofile/cache“ from every backup entry.
