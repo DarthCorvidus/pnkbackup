@@ -3,7 +3,6 @@ import datetime
 from include.lib.Argv import ArgModel
 from include.lib.Argv.ArgString import ArgString
 from include.lib.Argv.ArgvModel import ArgvModel
-from include.lib.Typetools.Validate.Validate import Validate
 from include.lib.Typetools.Validate.ValidateDate import ValidateDate
 
 
@@ -35,7 +34,6 @@ class ArgvTrim(ArgvModel):
 		self.__named["keepYears"] = ArgString()
 		self.__named["max"] = ArgString()
 
-
 	def getArgNames(self) -> list:
 		return self.__named.keys()
 
@@ -52,5 +50,5 @@ class ArgvTrim(ArgvModel):
 		return self.__positionalName[i]
 
 	def getBoolean(self) -> list:
-		return ["run"]
+		return ["run", "keepNone"]
 

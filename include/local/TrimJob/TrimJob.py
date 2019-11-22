@@ -24,10 +24,24 @@ class TrimJob:
 		if self.__argv.hasNamedValue("max"):
 			self.__max = int(self.__argv.getNamedValue("max"))
 		self.__entries = BackupEntries.fromPath(self.__argv.getPositionalValue(1))
+		if self.__argv.getBoolean("keepNone") is True:
+			self.__selectAll()
+			return
 		self.__selectDays()
 		self.__selectWeeks()
 		self.__selectMonths()
 		self.__selectYears()
+
+	def __selectAll(self):
+		filter = self.__getFilter()
+		filtered = self.__entries.getFiltered(filter)
+		for i in range(filtered.getEntryCount()):
+			if self.__max is not None and self.__count == self.__max:
+				break
+			entry = filtered.getEntry(i)
+			self.__toDelete.append(entry)
+			self.__count = self.__count+1
+
 
 	def __selectDays(self):
 		if self.__argv.hasNamedValue("keepDays") is False:
@@ -60,12 +74,8 @@ class TrimJob:
 		self.__addGeneric(fdoy, "yearly")
 
 	def __addGeneric(self, referenceDate:date, period:str):
-		filter = BackupEntryFilter()
+		filter = self.__getFilter()
 		filter.setPeriods([period])
-		if self.__argv.hasNamedValue("subdir"):
-			filter.setSubdir(self.__argv.getNamedValue("subdir"));
-		if self.__argv.hasNamedValue("from"):
-			filter.setFrom(ConvertDate.datefromiso(self.__argv.getNamedValue("from")))
 		filtered = self.__entries.getFiltered(filter)
 		for i in range(filtered.getEntryCount()):
 			if self.__max is not None and self.__count == self.__max:
@@ -75,6 +85,16 @@ class TrimJob:
 				continue
 			self.__toDelete.append(entry)
 			self.__count = self.__count+1
+
+	def __getFilter(self) -> BackupEntries:
+		filter = BackupEntryFilter()
+		if self.__argv.hasNamedValue("subdir"):
+			filter.setSubdir(self.__argv.getNamedValue("subdir"));
+		if self.__argv.hasNamedValue("from"):
+			filter.setFrom(ConvertDate.datefromiso(self.__argv.getNamedValue("from")))
+		if self.__argv.hasNamedValue("to"):
+			filter.setTo(ConvertDate.datefromiso(self.__argv.getNamedValue("to")))
+		return filter
 
 	def __delete(self):
 		if self.__argv.getBoolean("run") is False:
