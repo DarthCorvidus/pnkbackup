@@ -2,9 +2,6 @@ import os
 import shutil
 import subprocess
 
-import sys
-
-from include.lib.Argv import ArgvModel
 from include.lib.Argv.Argv import Argv
 from include.local.BackupEntries import BackupEntries
 from include.local.BackupEntry import BackupEntry
@@ -18,6 +15,7 @@ class RebuildJob():
 	__rebuild = []
 	__max = None
 	__count = 0
+
 	def __init__(self, argv:list):
 		self.__rebuild = []
 		argvModel = ArgvRebuild()
@@ -67,7 +65,6 @@ class RebuildJob():
 		subprocess.run(["cp", src, tmp, "-al"])
 		print("Rename "+tmp+" to "+dst+"\n\n")
 		os.rename(tmp, dst)
-
 
 	def run(self):
 		if len(self.__rebuild)==0:
