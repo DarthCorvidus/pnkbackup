@@ -70,6 +70,9 @@ class RebuildJob():
 
 
 	def run(self):
+		if len(self.__rebuild)==0:
+			print("No entries to rebuilt")
+			quit()
 		for path in self.__rebuild:
 			print(path)
 		if self.__argv.getBoolean("run") is not True:

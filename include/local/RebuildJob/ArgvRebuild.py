@@ -1,5 +1,3 @@
-from operator import length_hint
-
 from include.lib.Argv.ArgModel import ArgModel
 from include.lib.Argv.ArgString import ArgString
 from include.lib.Argv.ArgvModel import ArgvModel
@@ -9,6 +7,7 @@ class ArgvRebuild(ArgvModel):
 	__positional = None
 	__positionalNames = None
 	__named = None
+
 	def __init__(self):
 		self.__positional = []
 		self.__positionalNames = []
@@ -34,6 +33,3 @@ class ArgvRebuild(ArgvModel):
 
 	def getBoolean(self) -> list:
 		return ["weekly", "monthly", "yearly", "run"]
-
-	def run(self):
-		pass
