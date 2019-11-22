@@ -62,6 +62,8 @@ class TrimJob:
 	def __addGeneric(self, referenceDate:date, period:str):
 		filter = BackupEntryFilter()
 		filter.setPeriods([period])
+		if self.__argv.hasNamedValue("subdir"):
+			filter.setSubdir(self.__argv.getNamedValue("subdir"));
 		if self.__argv.hasNamedValue("from"):
 			filter.setFrom(ConvertDate.datefromiso(self.__argv.getNamedValue("from")))
 		filtered = self.__entries.getFiltered(filter)
