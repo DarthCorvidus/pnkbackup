@@ -4,7 +4,7 @@ pnkbackup processes one or more backup jobs defined within config files.
 
 Usage:
 
-	lnkbackup.php <config file or directory>
+	lnkbackup.py <config file or directory>
 
 Configuration:
 
