@@ -5,16 +5,17 @@ lnkcopy checks every daily entry and looks for missing periodic entries such as
 
 Usage:
 	
-	lnkrebuild.py <backup>
+    lnkrebuild.py <backup>
 
 Parameters:
 
-	--weeks		include weeks
-	--months	include months
-	--years		include years
-	--run		rebuild entries
+    --weeks		include weeks
+    --months	include months
+    --years		include years
+    --all       include every non-daily period
+    --run		rebuild entries
 
-Please note that, if weeks, months and years are ommited, every periodic entry
+Please note that, if weeks, months and years are omited, every periodic entry
 will be rebuilt.
 
 lnkrebuild creates a directory "temp.rebuild" for every entry which needs to be
