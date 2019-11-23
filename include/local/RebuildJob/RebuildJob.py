@@ -44,7 +44,12 @@ class RebuildJob():
 		if(self.__max is not None and self.__max==self.__count):
 			return
 		path = entry.getAbsolutePath() + "."+period
-		if self.__argv.getBoolean(period) is True and os.path.isdir(path) is False and entry.getDate().strftime(strftime)==expected:
+		#I don't like long boolean expression, so let's divy it up.
+		if (self.__argv.getBoolean(period) is True or self.__argv.getBoolean("all")) is not True:
+			return
+		if os.path.isdir(path) is True:
+			return
+		if entry.getDate().strftime(strftime)==expected:
 			self.__rebuild.append(path)
 			self.__count = self.__count + 1
 

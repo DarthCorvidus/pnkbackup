@@ -32,4 +32,4 @@ class ArgvRebuild(ArgvModel):
 		pass
 
 	def getBoolean(self) -> list:
-		return ["weekly", "monthly", "yearly", "run"]
+		return ["weekly", "monthly", "yearly", "all", "run"]
