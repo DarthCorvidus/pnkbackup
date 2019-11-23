@@ -12,18 +12,20 @@ class ArgvCopy(ArgvModel):
 	def __init__(self):
 		self.__positional = []
 		self.__positionalNames = []
+		self.__named = {}
 		config = ArgString()
 		config.setValidate(ValidatePath())
 		self.__positional.append(config)
 		self.__positionalNames.append("source")
 		self.__positional.append(config)
 		self.__positionalNames.append("target")
+		self.__named["max"] = ArgString()
 
 	def getArgNames(self) -> list:
-		pass
+		return self.__named.keys()
 
 	def getNamedArg(self, name: str) -> ArgModel:
-		pass
+		return self.__named[name]
 
 	def getPositionalCount(self) -> int:
 		return len(self.__positional)
