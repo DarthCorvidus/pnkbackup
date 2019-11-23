@@ -1,9 +1,5 @@
-import os
-
-import sys
 from glob import glob
 
-from include.lib.Typetools.Convert.ConvertDate import ConvertDate
 from include.local.BackupEntry import BackupEntry
 from include.local.BackupEntryFilter import BackupEntryFilter
 
@@ -46,3 +42,10 @@ class BackupEntries:
 			if filter.hasLimit() and i>=filter.getLimit():
 				return new
 		return new
+
+	def getBasenames(self) -> list:
+		basename = []
+		for entry in self.__entries:
+			basename.append(entry.getBasename())
+		return basename
+
