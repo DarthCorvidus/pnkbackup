@@ -54,7 +54,7 @@ class BackupEntryFilter:
 	def filterFrom(self, entry:BackupEntry) -> bool:
 		if self.__dateFrom is None:
 			return True
-		if int(self.__dateFrom.strftime("%s"))<int(entry.getDate().strftime("%s")):
+		if int(self.__dateFrom.strftime("%s"))<=int(entry.getDate().strftime("%s")):
 			return True
 		return False
 
