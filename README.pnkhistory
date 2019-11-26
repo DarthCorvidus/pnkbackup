@@ -1,0 +1,21 @@
+pnkhistory
+
+pnkhistory lists all files present in the root directory or a given subdirectory
+of every backup entry, showing the first and last occurence of a file. Every
+file which was at some point in a certain directory of the backup will be
+listed.
+
+Usage:
+
+    pnkhistory <backup> [parameters]
+
+Parameters:
+
+    --subdir a certain subdirectory to list.
+
+Examples:
+
+    pnkhistory /backup/homedirs/ --subdir=joe
+
+Assuming that pnkbackup made copies of /home/, pnkhistory lists the contents of
+/home/joe, showing every file which is present in any version of /home/joe.
