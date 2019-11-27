@@ -5,6 +5,7 @@ from glob import glob
 from include.lib.Argv.Argv import Argv
 from include.local.BackupEntries import BackupEntries
 from include.local.BackupEntry import BackupEntry
+from include.local.BackupEntryFilter import BackupEntryFilter
 from include.local.History.ArgvHistory import ArgvHistory
 from include.local.History.HistoryFile import HistoryFile
 
@@ -18,9 +19,18 @@ class History:
 	def __init__(self, argv:list):
 		model = ArgvHistory()
 		self.__argv = Argv(model, argv)
-		self.__entries = BackupEntries.fromPath(self.__argv.getPositionalValue(1))
+		entries = BackupEntries.fromPath(self.__argv.getPositionalValue(1))
 		self.__subdir = Argv.getNamedValue(self.__argv, "subdir")
 		self.__files = {}
+		periods = ["daily", "weekly", "monthly", "yearly"]
+		filterperiods = []
+		for period in periods:
+			if self.__argv.getBoolean(period):
+				filterperiods.append(period)
+		filter = BackupEntryFilter()
+		if len(filterperiods)!=0:
+			filter.setPeriods(filterperiods)
+		self.__entries = entries.getFiltered(filter)
 		for i in range(self.__entries.getEntryCount()):
 			entry = self.__entries.getEntry(i)
 			self.__scan(entry)
@@ -42,16 +52,18 @@ class History:
 		dir = []
 		file = []
 		for name in self.__files:
-			entry = self.__getHistoryFile(name)
-			if entry.isDir():
-				dir.append(entry.getName())
+			histFile = self.__getHistoryFile(name)
+			if histFile.isDir():
+				dir.append(histFile.getName())
 			else:
-				file.append(entry.getName())
+				file.append(histFile.getName())
 		dir.sort()
 		file.sort()
 		for name in dir:
-			print("d "+entry.getFirstDate().strftime("%d.%m.%Y")+" "+entry.getLastDate().strftime("%d.%m.%Y")+" "+name+"/")
+			histFile = self.__getHistoryFile(name)
+			print("d "+histFile.getFirstDate().isoformat() +" "+histFile.getLastDate().isoformat()+" "+histFile.getName()+"/")
 		for name in file:
-			print("  "+entry.getFirstDate().strftime("%d.%m.%Y")+" "+entry.getLastDate().strftime("%d.%m.%Y")+" "+name)
+			histFile = self.__getHistoryFile(name)
+			print("  "+histFile.getFirstDate().isoformat() +" "+histFile.getLastDate().isoformat()+" "+histFile.getName()+"/")
 
 		pass
