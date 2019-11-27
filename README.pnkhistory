@@ -11,7 +11,14 @@ Usage:
 
 Parameters:
 
-    --subdir a certain subdirectory to list.
+    --subdir  a certain subdirectory to list.
+    --daily   traverse daily entries
+    --weekly  traverse monthly entries
+    --monthly traverse monthly entries
+    --yearly  traverse yearly entries
+
+If -daily, --weekly, --monthly and --yearly are omitted, pnkhistory traverses
+every entry.
 
 Examples:
 
