@@ -1,3 +1,4 @@
+import os
 from glob import glob
 
 from include.local.BackupEntry import BackupEntry
@@ -12,6 +13,10 @@ class BackupEntries:
 
 	@staticmethod
 	def fromPath(dir):
+		if os.path.exists(dir) is False:
+			raise Exception("backup target "+dir+" does not exist.")
+		if os.path.isdir(dir) is False:
+			raise Exception("backup target " + dir + " is not a directory.")
 		files = glob(dir+"/*")
 		files.sort();
 		entries = BackupEntries()

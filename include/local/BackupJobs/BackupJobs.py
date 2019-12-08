@@ -30,7 +30,10 @@ class BackupJobs:
 			files.append(path)
 		files.sort()
 		for path in files:
-			self.__jobs.append(BackupJob(path, self.__argv))
+			try:
+				self.__jobs.append(BackupJob(path, self.__argv))
+			except Exception as e:
+				self.__failed[os.path.basename(path)] = e.args[0];
 
 	def printSuccess(self):
 		if len(self.__success)>0:
