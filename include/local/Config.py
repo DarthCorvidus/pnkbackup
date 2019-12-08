@@ -1,3 +1,5 @@
+import os
+
 class Config:
 	__values = {}
 	__filename = ""
@@ -8,6 +10,7 @@ class Config:
 		for line in handle:
 			self.__parse(line)
 		handle.close()
+		self.__checkExclude()
 
 	def getFilename(self) -> str:
 		return self.__filename
@@ -32,3 +35,12 @@ class Config:
 
 	def getExclude(self):
 		return self.__values["exclude"]
+
+	def __checkExclude(self):
+		if self.hasExclude() is False:
+			return
+		exclude = self.getExclude()
+		if os.path.exists(exclude) is False:
+			raise Exception("exclude file "+self.getExclude()+" does not exist")
+		if os.path.isfile(self.getExclude()) is False:
+			raise Exception("exclude file "+self.getExclude()+" is not a file")
