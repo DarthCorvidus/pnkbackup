@@ -1,10 +1,8 @@
 import os
-import shutil
-import subprocess
-import time
+
 from include.lib.Argv.Argv import Argv
+from include.lib.Typetools.Convert.ConvertDate import ConvertDate
 from include.local.BackupEntries import BackupEntries
-from include.local.BackupEntry import BackupEntry
 from include.local.BackupEntryFilter import BackupEntryFilter
 from include.local.CopyJob.ArgvCopy import ArgvCopy
 from include.local.Rsync import Rsync
@@ -18,10 +16,15 @@ class CopyJob:
 	__latestSource = None
 	__filter = None
 	__max = None
+
 	def __init__(self, argv:list):
 		argvModel = ArgvCopy()
 		self.__argv = Argv(argvModel, argv)
 		self.__filter = BackupEntryFilter()
+		if self.__argv.hasNamedValue("from"):
+			self.__filter.setFrom(ConvertDate.datefromiso(self.__argv.getNamedValue("from")))
+		if self.__argv.hasNamedValue("to"):
+			self.__filter.setTo(ConvertDate.datefromiso(self.__argv.getNamedValue("to")))
 		print("Source Set: "+self.__argv.getPositionalValue(1))
 		print("Target Set: "+self.__argv.getPositionalValue(2))
 		if self.__argv.hasNamedValue("max"):
@@ -31,7 +34,11 @@ class CopyJob:
 
 	def __load(self):
 		self.__source = BackupEntries.fromPath(self.__argv.getPositionalValue(1)).getFiltered(self.__filter)
-		self.__target = BackupEntries.fromPath(self.__argv.getPositionalValue(2)).getFiltered(self.__filter)
+		#The target must not be filtered, as pnkcopy has to determine the value for --link-dest. If self.__target would
+		#be filtered as well, pnkcopy might assume that the target backup set is "empty" and refrain from using
+		#--link-dest, which would result in many files to be copied instead of being linked.
+		#self.__target = BackupEntries.fromPath(self.__argv.getPositionalValue(2)).getFiltered(self.__filter)
+		self.__target = BackupEntries.fromPath(self.__argv.getPositionalValue(2))
 		self.__determineDiff()
 
 	def __determineDiff(self):
@@ -39,7 +46,7 @@ class CopyJob:
 		source = self.__source.getBasenames()
 		target = self.__target.getBasenames()
 		self.__latestSource = self.__source.getEntry(0)
-		added = 0;
+		added = 0
 		for i in range(self.__source.getEntryCount()):
 			if self.__max is not None and added==self.__max:
 				return
@@ -62,7 +69,6 @@ class CopyJob:
 				targetLatest = self.__target.getEntry(self.__target.getEntryCount() - 1)
 				rsync.setLink(targetLatest.getAbsolutePath())
 			print(rsync.getCommand())
-			time.sleep(5)
 			rsync.exec()
 			print("Renaming "+temp+" to "+target)
 			os.rename(temp, target);

@@ -1,6 +1,7 @@
 from include.lib.Argv.ArgModel import ArgModel
 from include.lib.Argv.ArgString import ArgString
 from include.lib.Argv.ArgvModel import ArgvModel
+from include.lib.Typetools.Validate.ValidateDate import ValidateDate
 from include.lib.Typetools.Validate.ValidatePath import ValidatePath
 
 
@@ -20,6 +21,10 @@ class ArgvCopy(ArgvModel):
 		self.__positional.append(config)
 		self.__positionalNames.append("target")
 		self.__named["max"] = ArgString()
+		date = ArgString()
+		date.setValidate(ValidateDate("iso"))
+		self.__named["to"] = date
+		self.__named["from"] = date
 
 	def getArgNames(self) -> list:
 		return self.__named.keys()
