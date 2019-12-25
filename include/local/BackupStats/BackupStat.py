@@ -1,8 +1,6 @@
 import os
+
 from datetime import date
-
-from reportlab.graphics.charts.lineplots import _maxWidth
-
 from include.local.BackupEntries import BackupEntries
 from include.local.Config import Config
 
